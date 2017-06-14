@@ -6,7 +6,9 @@ function createHouse (req,res,next){
     price: req.body.price,
     image: req.body.image,
     description: req.body.description,
-    location: req.body.location,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    owner: req.body.owner,
     user_id: req.body.user_id
   })
 }
@@ -20,7 +22,9 @@ function updateHouse (req,res,next){
       price: req.body.price || result.price,
       image: req.body.image || result.image,
       description: req.body.description || result.description,
-      location: req.body.location || result.location
+      latitude: req.body.latitude || result.latitude,
+      longitude: req.body.longitude || result.longitude,
+      owner: req.body.owner || result.owner
     })
   })
 }

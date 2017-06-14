@@ -28,35 +28,39 @@
                 <textarea type="text" style="margin-top:6%;" rows="7" cols="40" v-model="description" placeholder="description(optional)"></textarea>
                 <br />
                 <br />
+                <!-- <template>
+                <h3 style="line-height:20%;"><i class="fa fa-picture-o fa-1x" style="line-height:6%;color:#339966"></i>Image Url</h3>
+                <vue-clip :options="options">
+                  <template slot="clip-uploader-action">
+                    <div>
+                      <div class="dz-message"><button type="button">Choose File</button></div>
+                    </div>
+                  </template>
+                  <template slot="clip-uploader-body" scope="props" v-model="image">
+                    <div v-for="file in props.files">
+                      <img v-bind:src="file.dataUrl" v-model="image">
+                      {{ file.name }} {{file.status}}
+                    </div>
+                  </template>
+
+                </vue-clip>
+              </template> -->
+
                 <h3 style="line-height:20%;"><i class="fa fa-picture-o fa-1x" style="line-height:6%;color:#339966"></i>Image Url</h3>
                 <input type="text" style="margin-top:6%;" v-model="image" placeholder="copy image url here">
                 <br />
                 <br />
                 <h3 style="line-height:20%;"><i class="fa fa-map-marker fa-1x" style="line-height:6%;color:#339966"></i>Location</h3>
-                <input type="text" style="margin-top:6%;" v-model="longitude" placeholder="longitude">
-                <input type="text" style="margin-top:6%;" v-model="langitude" placeholder="langitude">
+                <input type="text" style="margin-top:6%;" v-model="latitude" placeholder="latitude">
+                <input type="text" style="margin-top:6%;" v-model="longitude" placeholder="longitude">      
                 <br>
                 <br>
-                <button type="button" class="btn btn-success">Sell</button>
+                <button type="button" class="btn btn-success" @click="sellHouse()">Sell</button>
               </form>              
             </div>
         </div>
         <div class="col-sm-6">
-            <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96690.80542089987!2d29.864461132544537!3d40.77109282810726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cb4f66644bfb9d%3A0x82690ee7586b7eb9!2zxLB6bWl0LCBLb2NhZWxp!5e0!3m2!1str!2str!4v1480782606579" width="565" height="430" frameborder="0" style="border:0" allowfullscreen></iframe> -->
-            <gmap-map
-              :center='center'
-              :zoom="7"
-              style="width:500px; height:300px"
-              >
-              <gmap-marker
-                :key="index"
-                v-for="(m,index) in markers"
-                :position="m.position"
-                :clickable="true"
-                :draggable="true"
-                @click="center=m.position"
-                ></gmap-marker>
-              </gmap-map>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96690.80542089987!2d29.864461132544537!3d40.77109282810726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cb4f66644bfb9d%3A0x82690ee7586b7eb9!2zxLB6bWl0LCBLb2NhZWxp!5e0!3m2!1str!2str!4v1480782606579" width="565" height="430" frameborder="0" style="border:0" allowfullscreen></iframe>
         </div>
     </div>
 </div>
@@ -66,9 +70,11 @@
 
 <script>
 import Vue from 'vue'
-import * as VueGoogleMaps from 'vue2-google-maps';
-
 import {mapGetters} from 'vuex'
+import VueClip from 'vue-clip'
+
+Vue.use(VueClip)
+
 export default {
   data(){
     return{
@@ -77,12 +83,12 @@ export default {
       description:"",
       image:"",
       longitude: "",
-      langitude: "",
+      latitude: "",
       location:"",
-      center:{lat:-6.2023936 , lng:106.65270989999999},
-      markers: [{
-        position:{lat:-6.2023936,lng:106.65270989999999},
-      }]
+      options:{
+        url:'/upload',
+        paramName:'file'
+      }
     }
   },
   methods:{
@@ -93,13 +99,21 @@ export default {
       }
     },
     sellHouse(){
+      let val = (this.price/1).toFixed(2).replace('.', ',')
+      let formatedPrice = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      let user = JSON.parse(localStorage.getItem('user'))
       this.$store.dispatch('sellHouse',{
         name: this.name,
-        price: this.price,
+        price: formatedPrice,
         description: this.description,
         image: this.image,
-        location:{lat:this.langitude,lng:this.longitude}
+        latitude: this.latitude,
+        longitude: this.longitude,
+        owner: user.username,
+        user_id: user._id
       })
+      alert(`${this.name} Posted!`)
+      // this.$router.push('/')
     }
   },
 

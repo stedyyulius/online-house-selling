@@ -4,11 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import {store} from './store/store.js'
 import router from './router'
-import * as VueGoogleMaps from 'vue2-google-maps';
-
-Vue.use(VueGoogleMaps,{
-  load:{
-    key: 'AIzaSyDVGySwQ_T_TfpFWU7-CfdVk7mcJiryqJU'
+import * as VueGoogleMap from 'vue2-google-maps';
+Vue.use(VueGoogleMap, {
+  load: {
+    key: 'AIzaSyC209DfCPvaswfO7QmR7Mein0CqhgoV7ME',
+    v: '3.26'               // Google Maps API version 
+    // libraries: 'places',   // If you want to use places input 
   }
 })
 

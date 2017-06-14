@@ -3,11 +3,13 @@ const Schema = mongoose.Schema
 
 var houseSchema = new Schema({
   name: String,
-  location: {String},
-  price: Number,
+  latitude: Number,
+  longitude: Number,
+  price: String,
   image: String,
   createdAt: Date,
   description: String,
+  owner: String,
   user_id: {type:Schema.Types.ObjectId, ref:'User'}
 })
 

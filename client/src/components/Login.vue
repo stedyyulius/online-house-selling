@@ -95,7 +95,7 @@ export default {
       })
       .then(response=>{
         console.log(`masuk sukses`);
-        localStorage.setItem('user',response.data)
+        localStorage.setItem('user',JSON.stringify(response.data))
         this.$store.commit('changeLoginStatus',true)
         this.$router.push('/')
       })

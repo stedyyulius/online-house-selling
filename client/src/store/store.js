@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
     houses: [],
     isLogin: false,
     center:{lat:-6.2023936 , lng:106.65270989999999},
-    location: ""
+    markers: [{
+    }]
   },
   getters:{
     houses(state){
@@ -19,6 +20,9 @@ export const store = new Vuex.Store({
     },
     center(state){
       return state.center
+    },
+    markers(state){
+      return state.markers
     }
   },
   mutations:{
@@ -31,10 +35,22 @@ export const store = new Vuex.Store({
     },
     addHouse(state,house){
       state.houses.push(house)
+      console.log(`masuk add`);
     },
-    getLocation(state,position){
-      state.center = position
-      state.location = JSON.stringify(position)
+    deleteHouse(state,index){
+      state.houses.splice(index,1)
+      console.log(`masuk delete`);
+    },
+    listLocation(state,data){
+      data.forEach(d=>{
+      state.markers.push({
+          position:{
+            lat:d.latitude,
+            lng:d.longitude,
+            pic:d.image
+          }
+        })
+      })
     }
   },
   actions:{
@@ -48,9 +64,23 @@ export const store = new Vuex.Store({
       })
     },
     sellHouse({commit},payload){
-      axios.post(`http://localhost:3000/house/createHouse`,payload)
+      console.log(payload);
+      axios.post(`http://localhost:3000/house`,payload)
       .then(reponse=>{
+        console.log(`masuk`);
         commit('addHouse',response.data)
+      })
+    },
+    deleteHouse({commit},id,index){
+      axios.delete(`http://localhost:3000/house/${id}`)
+      .then(response=>{
+        commit('deleteHouse',index)
+      })
+    },
+    listLocation({commit}){
+      axios.get(`http://localhost:3000/house/list`)
+      .then(response=>{
+        commit('listLocation',response.data)
       })
     }
   }

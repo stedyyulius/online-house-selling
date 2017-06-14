@@ -16,6 +16,7 @@
                   <li v-if="isLogin === true"><router-link to="/">Home</router-link></li>
                   <li v-if="isLogin === true"><router-link to="/jual">Jual Rumah Gua</router-link></li>
                   <li v-if="isLogin === true"><a href="#" @click="logout">Logout</a></li>
+                  <li v-if="isLogin === true"><router-link to="/maps">Maps</router-link></li>
               </ul>
           </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
